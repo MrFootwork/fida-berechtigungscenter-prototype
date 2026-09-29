@@ -1,11 +1,23 @@
 <!-- src/components/PermissionCenter.vue -->
 <script setup>
 import { ref } from 'vue'
+import "@ui5/webcomponents/dist/Toast.js"
 import { usePermissions } from '@/composables/usePermissions'
 import ActivePermissions from '@/components/ActivePermissions.vue'
 
 // Geschäftslogik wird sauber über das Composable eingebunden
-const { permissions, history, loading, handleToggle, createPermission } = usePermissions()
+const {
+  permissions,
+  history,
+  loading,
+  permissionChanged,
+  saving,
+  toastMessage,
+  toastKey,
+  handleToggle,
+  savePermissions,
+  createPermission
+} = usePermissions()
 
 const newPerm = ref({
   dateninhaber: 'Bank B',
@@ -20,18 +32,29 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <div style="padding: 20px; font-family: sans-serif;">
-    <h2>Berechtigungscenter (Modularer Prototyp)</h2>
+  <div>
+    <h2>Berechtigungsmaske</h2>
 
     <div v-if="loading">Lade Daten...</div>
 
     <ActivePermissions
                        v-else
                        :permissions="permissions"
-                       @toggle="handleToggle" />
+                       :permission-changed="permissionChanged"
+                       :saving="saving"
+                       @toggle="handleToggle"
+                       @save="savePermissions" />
+
+    <ui5-toast
+               v-if="toastMessage"
+               :key="toastKey"
+               :open="true"
+               duration="5000">
+      {{ toastMessage }}
+    </ui5-toast>
 
     <!-- Formular -->
-    <section style="margin-bottom: 30px; border-top: 2px solid #eee; padding-top: 20px;">
+    <!-- <section style="margin-bottom: 30px; border-top: 2px solid #eee; padding-top: 20px;">
       <h3>Neue Berechtigung erteilen</h3>
       <div style="display: flex; flex-direction: column; max-width: 400px; gap: 10px;">
         <label for="dateninhaber">Dateninhaber</label>
@@ -48,7 +71,7 @@ const onSubmit = async () => {
           Freigabe erteilen
         </button>
       </div>
-    </section>
+    </section> -->
 
     <!-- Historie -->
     <!-- <section style="border-top: 2px solid #eee; padding-top: 20px;">

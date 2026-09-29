@@ -1,53 +1,71 @@
 // src/services/permissionService.js
 
 // Interne Mock-Daten
-let dataOwners = [
-  'Bank B',
-  'Finanzdienstleister C',
-  'Versicherer D',
-  'Einrichtung E'
-]
-
 let permissions = [
   {
-    id: '1',
-    dateninhaber: 'Versicherer D',
-    produkt: 'Hausrat- und Kfz-Versicherung',
-    zweck: 'Liquiditätsoptimierung',
-    gueltigBis: '2027-08-26',
-    status: true
-  },
-  {
-    id: '2',
+    id: 'PRM-Z1-B',
+    zweckCode: 'Z1',
     dateninhaber: 'Bank B',
     produkt: 'Ratenkredit',
+    kategorie: 'lit. a',
     zweck: 'Kreditoptimierung',
+    angeforderteFelder: ['Restschuld', 'Effektivzins', 'Rate', 'Restlaufzeit'],
+    nichtAngefordert: ['Transaktionen'],
+    ergebnis: ['Konditionsvergleich'],
     gueltigBis: '2027-08-26',
-    status: true
+    status: false
   },
   {
-    id: '21',
+    id: 'PRM-Z2-B',
+    zweckCode: 'Z2',
     dateninhaber: 'Bank B',
     produkt: 'Tagesgeld, Festgeld',
+    kategorie: 'lit. a',
     zweck: 'Liquiditätsoptimierung',
+    angeforderteFelder: ['Saldo', 'Konditionen'],
+    nichtAngefordert: ['Transaktionen'],
+    ergebnis: ['Konditionsvergleich', 'Übersicht'],
     gueltigBis: '2027-08-26',
-    status: true
+    status: false
   },
   {
-    id: '3',
+    id: 'PRM-Z2-C',
+    zweckCode: 'Z2',
     dateninhaber: 'Finanzdienstleister C',
     produkt: 'Depot, ETF-Sparplan',
+    kategorie: 'lit. b',
     zweck: 'Liquiditätsoptimierung',
+    angeforderteFelder: ['Bestandswert', 'Sparrate'],
+    nichtAngefordert: ['Eignungsdaten'],
+    ergebnis: ['Übersicht'],
     gueltigBis: '2027-08-26',
-    status: true
+    status: false
   },
   {
-    id: '4',
+    id: 'PRM-Z2-D',
+    zweckCode: 'Z2',
+    dateninhaber: 'Versicherer D',
+    produkt: 'Hausrat, Kfz',
+    kategorie: 'lit. e',
+    zweck: 'Liquiditätsoptimierung',
+    angeforderteFelder: ['Vertragsart', 'Prämie'],
+    nichtAngefordert: ['Schadenhistorie', 'Bedarfsanalyse'],
+    ergebnis: ['Übersicht', 'feste Auszahlungen'],
+    gueltigBis: '2027-08-26',
+    status: false
+  },
+  {
+    id: 'PRM-Z3-E',
+    zweckCode: 'Z3',
     dateninhaber: 'Einrichtung E',
     produkt: 'Anwartschaft',
+    kategorie: 'lit. c',
     zweck: 'Vorsorgeüberblick',
+    angeforderteFelder: ['Anwartschaftshöhe', 'Rentenbeginn'],
+    nichtAngefordert: [],
+    ergebnis: ['Anzeige'],
     gueltigBis: '2027-08-26',
-    status: true
+    status: false
   }
 ]
 
@@ -79,22 +97,31 @@ export const permissionService = {
     return [...history]
   },
 
-  async togglePermission(id, newStatus) {
+  async savePermissions(updatedPermissions) {
     await simulateApiDelay()
-    const item = permissions.find(p => p.id === id)
-    if (item) {
-      item.status = newStatus
-      if (!newStatus) {
+
+    updatedPermissions.forEach(updatedPermission => {
+      const previousPermission = permissions.find(
+        permission => permission.id === updatedPermission.id
+      )
+
+      if (previousPermission?.status && !updatedPermission.status) {
         history.unshift({
           id: Date.now().toString(),
-          dateninhaber: item.dateninhaber,
-          produkt: item.produkt,
-          zweck: item.zweck,
+          dateninhaber: updatedPermission.dateninhaber,
+          produkt: updatedPermission.produkt,
+          zweck: updatedPermission.zweck,
           ereignis: `Widerrufen am ${new Date().toLocaleDateString()}`
         })
       }
+    })
+
+    permissions = updatedPermissions.map(permission => ({ ...permission }))
+
+    return {
+      permissions: permissions.map(permission => ({ ...permission })),
+      history: [...history]
     }
-    return [...permissions]
   },
 
   async addPermission(newPermData) {

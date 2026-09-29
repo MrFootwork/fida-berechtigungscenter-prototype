@@ -1,43 +1,99 @@
 <script setup>
-import ToggleSwitch from 'primevue/toggleswitch'
 import "@ui5/webcomponents/dist/Switch.js"
+import "@ui5/webcomponents/dist/Button.js"
+import "@ui5/webcomponents/dist/Table.js"
+import "@ui5/webcomponents/dist/TableRow.js"
+import "@ui5/webcomponents/dist/TableCell.js"
+import "@ui5/webcomponents/dist/TableHeaderRow.js"
+import "@ui5/webcomponents/dist/TableHeaderCell.js"
 
 defineProps({
   permissions: {
     type: Array,
     required: true
+  },
+  permissionChanged: {
+    type: Boolean,
+    default: false
+  },
+  saving: {
+    type: Boolean,
+    default: false
   }
 })
 
-const emit = defineEmits(['toggle'])
+const emit = defineEmits(['toggle', 'save'])
+
 </script>
 
 <template>
   <section style="margin-bottom: 30px;">
     <h3>Aktive Freigaben</h3>
-    <!-- <div v-for="dataOwner in source">
 
-    </div> -->
-    <div
-         v-for="item in permissions"
-         :key="item.id"
-         style="border: 1px solid #ccc; padding: 15px; margin-bottom: 10px;">
-      <p><strong>Dateninhaber:</strong> {{ item.dateninhaber }}</p>
-      <p><strong>Zweck:</strong> {{ item.zweck }}</p>
-      <p><strong>Kategorie:</strong> {{ item.kategorie }}</p>
-      <p>
-        <strong>Status: </strong>
-        <!-- <ToggleSwitch
-                      :model-value="item.status"
-                      @update:model-value="emit('toggle', { ...item, status: $event })" /> -->
-        <ui5-switch
-                    :checked="item.status"
-                    @change="emit('toggle', {
-                      ...item,
-                      status: $event.currentTarget.checked
-                    })"></ui5-switch>
-        <span style="margin-left: 10px;">{{ item.status ? 'Aktiv' : 'Widerrufen' }}</span>
-      </p>
+    <div class="save-actions">
+      <ui5-button
+                  design="Emphasized"
+                  :disabled="!permissionChanged || saving"
+                  @click="emit('save')">
+        Speichern
+      </ui5-button>
     </div>
+
+    <ui5-table overflow-mode="Popin" accessible-name="Aktive Freigaben">
+      <ui5-table-header-row slot="headerRow">
+        <ui5-table-header-cell popin-text="Dateninhaber">
+          Dateninhaber
+        </ui5-table-header-cell>
+        <ui5-table-header-cell popin-text="Zweck">
+          Zweck
+        </ui5-table-header-cell>
+        <ui5-table-header-cell popin-text="Kategorie">
+          Kategorie
+        </ui5-table-header-cell>
+        <ui5-table-header-cell popin-text="Status" importance="3">
+          Status
+        </ui5-table-header-cell>
+      </ui5-table-header-row>
+
+      <ui5-table-row v-for="item in permissions" :key="item.id">
+        <ui5-table-cell>{{ item.dateninhaber }}</ui5-table-cell>
+        <ui5-table-cell>{{ item.zweck }}</ui5-table-cell>
+        <ui5-table-cell>{{ item.kategorie }}</ui5-table-cell>
+        <ui5-table-cell>
+          <ui5-switch
+                      class="permission-switch"
+                      :checked="item.status"
+                      :disabled="saving"
+                      :accessible-name="`Status für ${item.dateninhaber}`"
+                      @change="emit('toggle', {
+                        ...item,
+                        status: $event.currentTarget.checked
+                      })"></ui5-switch>
+          <!-- <span>{{ item.status ? 'Aktiv' : 'Widerrufen' }}</span> -->
+        </ui5-table-cell>
+      </ui5-table-row>
+    </ui5-table>
+
   </section>
 </template>
+
+<style scoped>
+.permission-switch {
+  padding-left: 0.25rem;
+}
+
+.save-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  padding-bottom: .5rem;
+}
+
+:deep(.permission-switch::part(slider)) {
+  border-radius: 999px;
+}
+
+:deep(.permission-switch::part(handle)) {
+  box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+}
+</style>
