@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@primeuix/themes": "^3.0.1",
+    "@ui5/webcomponents": "^2.27.2",
     "primevue": "^5.0.1",
     "vue": "^3.5.42"
   },

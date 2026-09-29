@@ -1,12 +1,19 @@
 // src/services/permissionService.js
 
 // Interne Mock-Daten
+let dataOwners = [
+  'Bank B',
+  'Finanzdienstleister C',
+  'Versicherer D',
+  'Einrichtung E'
+]
+
 let permissions = [
   {
     id: '1',
     dateninhaber: 'Versicherer D',
     produkt: 'Hausrat- und Kfz-Versicherung',
-    zweck: 'Vorsorge-Überblick / Finanzanalyse',
+    zweck: 'Liquiditätsoptimierung',
     gueltigBis: '2027-08-26',
     status: true
   },
@@ -15,6 +22,30 @@ let permissions = [
     dateninhaber: 'Bank B',
     produkt: 'Ratenkredit',
     zweck: 'Kreditoptimierung',
+    gueltigBis: '2027-08-26',
+    status: true
+  },
+  {
+    id: '21',
+    dateninhaber: 'Bank B',
+    produkt: 'Tagesgeld, Festgeld',
+    zweck: 'Liquiditätsoptimierung',
+    gueltigBis: '2027-08-26',
+    status: true
+  },
+  {
+    id: '3',
+    dateninhaber: 'Finanzdienstleister C',
+    produkt: 'Depot, ETF-Sparplan',
+    zweck: 'Liquiditätsoptimierung',
+    gueltigBis: '2027-08-26',
+    status: true
+  },
+  {
+    id: '4',
+    dateninhaber: 'Einrichtung E',
+    produkt: 'Anwartschaft',
+    zweck: 'Vorsorgeüberblick',
     gueltigBis: '2027-08-26',
     status: true
   }
@@ -30,16 +61,26 @@ let history = [
   }
 ]
 
+const simulateApiDelay = () => new Promise(resolve => setTimeout(resolve, 500))
+
 export const permissionService = {
+  async getDataOwners() {
+    await simulateApiDelay()
+    return [...dataOwners]
+  },
+
   async getPermissions() {
+    await simulateApiDelay()
     return [...permissions]
   },
 
   async getHistory() {
+    await simulateApiDelay()
     return [...history]
   },
 
   async togglePermission(id, newStatus) {
+    await simulateApiDelay()
     const item = permissions.find(p => p.id === id)
     if (item) {
       item.status = newStatus
@@ -57,6 +98,7 @@ export const permissionService = {
   },
 
   async addPermission(newPermData) {
+    await simulateApiDelay()
     permissions.push({
       id: Date.now().toString(),
       ...newPermData,
