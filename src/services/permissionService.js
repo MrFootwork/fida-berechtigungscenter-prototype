@@ -5,7 +5,7 @@ let permissions = [
   {
     id: 'PRM-Z1-B',
     zweckCode: 'Z1',
-    dateninhaber: 'Bank B',
+    dateninhaber: 'Externe Bank',
     produkt: 'Ratenkredit',
     kategorie: 'lit. a',
     zweck: 'Kreditoptimierung',
@@ -18,7 +18,7 @@ let permissions = [
   {
     id: 'PRM-Z2-B',
     zweckCode: 'Z2',
-    dateninhaber: 'Bank B',
+    dateninhaber: 'Externe Bank',
     produkt: 'Tagesgeld, Festgeld',
     kategorie: 'lit. a',
     zweck: 'Liquiditätsoptimierung',
@@ -31,7 +31,7 @@ let permissions = [
   {
     id: 'PRM-Z2-C',
     zweckCode: 'Z2',
-    dateninhaber: 'Finanzdienstleister C',
+    dateninhaber: 'Wertpapierfirma',
     produkt: 'Depot, ETF-Sparplan',
     kategorie: 'lit. b',
     zweck: 'Liquiditätsoptimierung',
@@ -44,7 +44,7 @@ let permissions = [
   {
     id: 'PRM-Z2-D',
     zweckCode: 'Z2',
-    dateninhaber: 'Versicherer D',
+    dateninhaber: 'Versicherer',
     produkt: 'Hausrat, Kfz',
     kategorie: 'lit. e',
     zweck: 'Liquiditätsoptimierung',
@@ -57,7 +57,7 @@ let permissions = [
   {
     id: 'PRM-Z3-E',
     zweckCode: 'Z3',
-    dateninhaber: 'Einrichtung E',
+    dateninhaber: 'Altersversorge GmbH',
     produkt: 'Anwartschaft',
     kategorie: 'lit. c',
     zweck: 'Vorsorgeüberblick',
@@ -72,7 +72,7 @@ let permissions = [
 let history = [
   {
     id: 'h-1',
-    dateninhaber: 'Finanzdienstleister C',
+    dateninhaber: 'Wertpapierfirma',
     produkt: 'Depot, ETF-Sparplan',
     zweck: 'Liquiditätsoptimierung',
     ereignis: 'Widerrufen am 15.01.2026'

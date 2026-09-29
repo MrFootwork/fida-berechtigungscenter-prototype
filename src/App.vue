@@ -20,7 +20,7 @@ const {
 } = usePermissions()
 
 const newPerm = ref({
-  dateninhaber: 'Bank B',
+  dateninhaber: 'Externe Bank',
   produkt: 'Girokonto',
   zweck: 'Finanzübersicht',
   gueltigBis: '1 Jahr'
@@ -59,9 +59,11 @@ const onSubmit = async () => {
       <div style="display: flex; flex-direction: column; max-width: 400px; gap: 10px;">
         <label for="dateninhaber">Dateninhaber</label>
         <select id="dateninhaber" v-model="newPerm.dateninhaber">
-          <option>Bank B</option>
-          <option>Finanzdienstleister C</option>
-          <option>Versicherer D</option>
+          <option>Inhouse Bank</option>
+          <option>Externe Bank</option>
+          <option>Wertpapierfirma</option>
+          <option>Versicherer</option>
+          <option>Altersversorge GmbH</option>
         </select>
         <label for="zweck">Zweck</label>
         <input id="zweck" type="text" v-model="newPerm.zweck" placeholder="Zweck" />
