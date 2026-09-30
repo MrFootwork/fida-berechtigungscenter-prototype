@@ -89,6 +89,13 @@ export const permissionService = {
     return [...dataOwners]
   },
 
+  async getPurposes() {
+    await simulateApiDelay()
+    return [
+      ...new Map(permissions.map(({ zweck, zweckCode }) => [zweck, { zweck, zweckCode }])).values(),
+    ]
+  },
+
   async getPermissions() {
     await simulateApiDelay()
     return [...permissions]
@@ -126,11 +133,26 @@ export const permissionService = {
     }
   },
 
+  async activatePermission(permissionId) {
+    await simulateApiDelay()
+    const permission = permissions.find((item) => item.id === permissionId)
+
+    if (!permission) return null
+
+    const alreadyActive = permission.status
+    permission.status = true
+
+    return {
+      alreadyActive,
+      permissions: permissions.map((item) => ({ ...item })),
+    }
+  },
+
   async addPermission(newPermData) {
     await simulateApiDelay()
     permissions.push({
-      id: Date.now().toString(),
       ...newPermData,
+      id: newPermData.id ?? Date.now().toString(),
       status: true,
     })
     return [...permissions]

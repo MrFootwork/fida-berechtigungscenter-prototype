@@ -1,10 +1,12 @@
 <script setup>
 import '@ui5/webcomponents/dist/Button.js'
-import '@ui5/webcomponents/dist/Input.js'
-import '@ui5/webcomponents/dist/Select.js'
-import '@ui5/webcomponents/dist/Option.js'
 import '@ui5/webcomponents/dist/RadioButton.js'
-import { reactive } from 'vue'
+import '@ui5/webcomponents/dist/Table.js'
+import '@ui5/webcomponents/dist/TableRow.js'
+import '@ui5/webcomponents/dist/TableCell.js'
+import '@ui5/webcomponents/dist/TableHeaderRow.js'
+import '@ui5/webcomponents/dist/TableHeaderCell.js'
+import { computed, reactive, ref } from 'vue'
 
 const emit = defineEmits(['create'])
 
@@ -13,32 +15,53 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  purposes: {
+    type: Array,
+    required: true,
+  },
+  permissions: {
+    type: Array,
+    required: true,
+  },
 })
 
 const form = reactive({
   dateninhaber: props.dataOwners[0] ?? '',
-  produkt: '',
-  kategorie: 'lit. a',
-  zweck: 'Kreditoptimierung',
+  zweck: props.purposes[0]?.zweck ?? '',
 })
 
-const purposeCodes = {
-  Kreditoptimierung: 'Z1',
-  Liquiditätsoptimierung: 'Z2',
-  Vorsorgeüberblick: 'Z3',
+const permissionOptions = props.permissions.map((permission) => ({
+  ...permission,
+  angeforderteFelder: [...permission.angeforderteFelder],
+  nichtAngefordert: [...permission.nichtAngefordert],
+  ergebnis: [...permission.ergebnis],
+}))
+const selectedPermissionId = ref('')
+
+const matchingPermissions = computed(() =>
+  permissionOptions.filter(
+    (permission) =>
+      permission.dateninhaber === form.dateninhaber && permission.zweck === form.zweck,
+  ),
+)
+
+const selectedPermission = computed(() =>
+  matchingPermissions.value.find((permission) => permission.id === selectedPermissionId.value),
+)
+
+const updateSelection = (field, value) => {
+  form[field] = value
+  selectedPermissionId.value = ''
 }
 
 const createGrant = () => {
+  if (!selectedPermission.value) return
+
   emit('create', {
-    ...form,
-    zweckCode: purposeCodes[form.zweck],
-    angeforderteFelder: [],
-    nichtAngefordert: [],
-    ergebnis: [],
-    gueltigBis: '',
+    ...selectedPermission.value,
+    status: true,
   })
-  form.dateninhaber = ''
-  form.produkt = ''
+  selectedPermissionId.value = ''
 }
 </script>
 
@@ -46,51 +69,75 @@ const createGrant = () => {
   <section class="grant-permission">
     <h3>Neue Freigabe</h3>
     <form class="grant-form" @submit.prevent="createGrant">
-      <fieldset class="data-owner-options">
-        <legend>Dateninhaber</legend>
-        <ui5-radio-button
-          v-for="owner in dataOwners"
-          :key="owner"
-          name="data-owner"
-          :text="owner"
-          :value="owner"
-          :checked="form.dateninhaber === owner"
-          @change="form.dateninhaber = $event.currentTarget.value"
-        ></ui5-radio-button>
-      </fieldset>
+      <div class="selection-groups">
+        <fieldset class="form-options">
+          <legend>Dateninhaber</legend>
+          <ui5-radio-button
+            v-for="owner in dataOwners"
+            :key="owner"
+            name="data-owner"
+            :text="owner"
+            :value="owner"
+            :checked="form.dateninhaber === owner"
+            @change="updateSelection('dateninhaber', $event.currentTarget.value)"
+          ></ui5-radio-button>
+        </fieldset>
 
-      <label>
-        Produkt
-        <ui5-input
-          :value="form.produkt"
-          required
-          placeholder="z. B. Girokonto"
-          accessible-name="Produkt"
-          @input="form.produkt = $event.currentTarget.value"
-        ></ui5-input>
-      </label>
+        <fieldset class="form-options">
+          <legend>Zweck</legend>
+          <ui5-radio-button
+            v-for="purpose in purposes"
+            :key="purpose.zweck"
+            name="permission-purpose"
+            :text="purpose.zweck"
+            :value="purpose.zweck"
+            :checked="form.zweck === purpose.zweck"
+            @change="updateSelection('zweck', $event.currentTarget.value)"
+          ></ui5-radio-button>
+        </fieldset>
+      </div>
 
-      <label>
-        Zweck
-        <ui5-select @change="form.zweck = $event.currentTarget.value">
-          <ui5-option value="Kreditoptimierung" selected>Kreditoptimierung</ui5-option>
-          <ui5-option value="Liquiditätsoptimierung">Liquiditätsoptimierung</ui5-option>
-          <ui5-option value="Vorsorgeüberblick">Vorsorgeüberblick</ui5-option>
-        </ui5-select>
-      </label>
+      <section class="permission-options" aria-label="Mögliche Berechtigungsobjekte">
+        <h4>Mögliche Berechtigungen</h4>
+        <ui5-table
+          v-if="matchingPermissions.length"
+          overflow-mode="Popin"
+          accessible-name="Berechtigungsobjekte für die ausgewählte Kombination"
+        >
+          <ui5-table-header-row slot="headerRow">
+            <ui5-table-header-cell popin-text="Auswahl">Auswahl</ui5-table-header-cell>
+            <ui5-table-header-cell popin-text="Produkt">Produkt</ui5-table-header-cell>
+            <ui5-table-header-cell popin-text="Kategorie">Kategorie</ui5-table-header-cell>
+            <ui5-table-header-cell popin-text="Angeforderte Daten">
+              Angeforderte Daten
+            </ui5-table-header-cell>
+          </ui5-table-header-row>
 
-      <label>
-        Kategorie
-        <ui5-select @change="form.kategorie = $event.currentTarget.value">
-          <ui5-option value="lit. a" selected>lit. a</ui5-option>
-          <ui5-option value="lit. b">lit. b</ui5-option>
-          <ui5-option value="lit. c">lit. c</ui5-option>
-          <ui5-option value="lit. e">lit. e</ui5-option>
-        </ui5-select>
-      </label>
+          <ui5-table-row v-for="permission in matchingPermissions" :key="permission.id">
+            <ui5-table-cell>
+              <ui5-radio-button
+                name="permission-option"
+                text="Auswählen"
+                :accessible-name="`${permission.produkt}, ${permission.kategorie} auswählen`"
+                :value="permission.id"
+                :checked="selectedPermissionId === permission.id"
+                @change="selectedPermissionId = $event.currentTarget.value"
+              ></ui5-radio-button>
+            </ui5-table-cell>
+            <ui5-table-cell>{{ permission.produkt }}</ui5-table-cell>
+            <ui5-table-cell>{{ permission.kategorie }}</ui5-table-cell>
+            <ui5-table-cell>{{ permission.angeforderteFelder.join(', ') }}</ui5-table-cell>
+          </ui5-table-row>
+        </ui5-table>
+        <p v-else class="empty-options">
+          Für diese Kombination gibt es kein Berechtigungsobjekt zur Auswahl.
+        </p>
+      </section>
 
       <div class="form-actions">
-        <ui5-button design="Emphasized" type="Submit">Freigabe erteilen</ui5-button>
+        <ui5-button design="Emphasized" type="Submit" :disabled="!selectedPermission">
+          Freigabe erteilen
+        </ui5-button>
       </div>
     </form>
   </section>
@@ -107,40 +154,45 @@ const createGrant = () => {
 }
 
 .grant-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 1rem;
 }
 
-.grant-form label {
-  display: grid;
-  gap: 0.375rem;
-  font-weight: 600;
+.selection-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
-.data-owner-options {
+.form-options {
+  flex: 1 1 17rem;
+  min-width: 0;
   display: grid;
-  gap: 0.5rem;
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-.data-owner-options legend {
+.form-options legend {
   margin-bottom: 0.5rem;
   padding: 0;
 }
 
+.permission-options h4 {
+  margin: 0 0 0.75rem;
+}
+
+.empty-options {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  color: var(--sapNeutralTextColor);
+  background: var(--sapList_Background);
+}
+
 .form-actions {
-  grid-column: 1 / -1;
   display: flex;
   justify-content: flex-end;
   margin-top: 0.5rem;
-}
-
-@media (max-width: 640px) {
-  .grant-form {
-    grid-template-columns: 1fr;
-  }
 }
 </style>

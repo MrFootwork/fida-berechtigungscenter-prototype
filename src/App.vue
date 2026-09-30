@@ -15,6 +15,7 @@ import GrantPermission from '@/components/GrantPermission.vue'
 const {
   permissions,
   dataOwners,
+  purposes,
   history,
   loading,
   permissionChanged,
@@ -73,7 +74,12 @@ const openFidaDemo = () => {
 
         <ui5-tabcontainer v-else>
           <ui5-tab text="Freigabe erteilen">
-            <GrantPermission :data-owners="dataOwners" @create="createPermission" />
+            <GrantPermission
+              :data-owners="dataOwners"
+              :purposes="purposes"
+              :permissions="permissions"
+              @create="createPermission"
+            />
           </ui5-tab>
 
           <ui5-tab text="Aktive Freigaben">
