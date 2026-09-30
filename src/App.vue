@@ -10,9 +10,11 @@ import '@ui5/webcomponents/dist/Toast.js'
 import { usePermissions } from '@/composables/usePermissions'
 import ActivePermissions from '@/components/ActivePermissions.vue'
 import PermissionHistory from '@/components/PermissionHistory.vue'
+import GrantPermission from '@/components/GrantPermission.vue'
 
 const {
   permissions,
+  dataOwners,
   history,
   loading,
   permissionChanged,
@@ -21,6 +23,7 @@ const {
   toastKey,
   handleToggle,
   savePermissions,
+  createPermission,
 } = usePermissions()
 
 const openFidaDemo = () => {
@@ -69,6 +72,10 @@ const openFidaDemo = () => {
         </ui5-busy-indicator>
 
         <ui5-tabcontainer v-else>
+          <ui5-tab text="Freigabe erteilen">
+            <GrantPermission :data-owners="dataOwners" @create="createPermission" />
+          </ui5-tab>
+
           <ui5-tab text="Aktive Freigaben">
             <ActivePermissions
               :permissions="permissions"

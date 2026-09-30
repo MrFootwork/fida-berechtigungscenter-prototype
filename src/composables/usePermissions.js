@@ -4,6 +4,7 @@ import { permissionService } from '@/services/permissionService'
 
 export function usePermissions() {
   const permissions = ref([])
+  const dataOwners = ref([])
   const history = ref([])
   const loading = ref(true)
   const permissionChanged = ref(false)
@@ -18,10 +19,14 @@ export function usePermissions() {
 
   const loadData = async () => {
     loading.value = true
-    permissions.value = (await permissionService.getPermissions()).map((permission) => ({
-      ...permission,
-    }))
-    history.value = await permissionService.getHistory()
+    const [loadedPermissions, loadedHistory, loadedDataOwners] = await Promise.all([
+      permissionService.getPermissions(),
+      permissionService.getHistory(),
+      permissionService.getDataOwners(),
+    ])
+    permissions.value = loadedPermissions.map((permission) => ({ ...permission }))
+    history.value = loadedHistory
+    dataOwners.value = loadedDataOwners
     loading.value = false
   }
 
@@ -54,6 +59,7 @@ export function usePermissions() {
 
   const createPermission = async (formData) => {
     permissions.value = await permissionService.addPermission(formData)
+    showToast('Freigabe erfolgreich erteilt.')
   }
 
   onMounted(() => {
@@ -62,6 +68,7 @@ export function usePermissions() {
 
   return {
     permissions,
+    dataOwners,
     history,
     loading,
     permissionChanged,

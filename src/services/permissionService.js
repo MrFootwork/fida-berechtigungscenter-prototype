@@ -69,6 +69,8 @@ let permissions = [
   },
 ]
 
+const dataOwners = [...new Set(permissions.map(({ dateninhaber }) => dateninhaber))]
+
 let history = [
   {
     id: 'h-1',
