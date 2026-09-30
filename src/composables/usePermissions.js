@@ -5,7 +5,7 @@ import { permissionService } from '@/services/permissionService'
 export function usePermissions() {
   const permissions = ref([])
   const history = ref([])
-  const loading = ref(false)
+  const loading = ref(true)
   const permissionChanged = ref(false)
   const saving = ref(false)
   const toastMessage = ref('')

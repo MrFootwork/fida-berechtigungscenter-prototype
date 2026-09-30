@@ -1,11 +1,20 @@
-<!-- src/components/PermissionCenter.vue -->
 <script setup>
-import { ref } from 'vue'
+import "@ui5/webcomponents-fiori/dist/ShellBar.js"
+import "@ui5/webcomponents-fiori/dist/Page.js"
+import "@ui5/webcomponents/dist/TabContainer.js"
+import "@ui5/webcomponents/dist/Tab.js"
+import "@ui5/webcomponents/dist/BusyIndicator.js"
+import "@ui5/webcomponents/dist/MessageStrip.js"
+import "@ui5/webcomponents/dist/Table.js"
+import "@ui5/webcomponents/dist/TableRow.js"
+import "@ui5/webcomponents/dist/TableCell.js"
+import "@ui5/webcomponents/dist/TableHeaderRow.js"
+import "@ui5/webcomponents/dist/TableHeaderCell.js"
+import "@ui5/webcomponents/dist/Title.js"
 import "@ui5/webcomponents/dist/Toast.js"
 import { usePermissions } from '@/composables/usePermissions'
 import ActivePermissions from '@/components/ActivePermissions.vue'
 
-// Geschäftslogik wird sauber über das Composable eingebunden
 const {
   permissions,
   history,
@@ -15,35 +24,79 @@ const {
   toastMessage,
   toastKey,
   handleToggle,
-  savePermissions,
-  createPermission
+  savePermissions
 } = usePermissions()
-
-const newPerm = ref({
-  dateninhaber: 'Externe Bank',
-  produkt: 'Girokonto',
-  zweck: 'Finanzübersicht',
-  gueltigBis: '1 Jahr'
-})
-
-const onSubmit = async () => {
-  await createPermission(newPerm.value)
-}
 </script>
 
 <template>
-  <div>
-    <h2>Berechtigungsmaske</h2>
+  <div class="application-layout">
+    <ui5-shellbar
+                  primary-title="FIDA Berechtigungscenter"
+                  secondary-title="Berechtigungsverwaltung"></ui5-shellbar>
 
-    <div v-if="loading">Lade Daten...</div>
+    <ui5-page class="application-page">
+      <div slot="header" class="page-heading">
+        <ui5-title level="H1">Berechtigungscenter</ui5-title>
+        <p>Verwalten Sie Ihre aktiven Datenfreigaben.</p>
+      </div>
 
-    <ActivePermissions
-                       v-else
-                       :permissions="permissions"
-                       :permission-changed="permissionChanged"
-                       :saving="saving"
-                       @toggle="handleToggle"
-                       @save="savePermissions" />
+      <main class="page-content">
+        <ui5-message-strip
+                           v-if="permissionChanged || saving"
+                           design="Information"
+                           hide-close-button>
+          {{ saving ? 'Änderungen werden gespeichert...' : 'Sie haben ungespeicherte Änderungen.' }}
+        </ui5-message-strip>
+
+        <ui5-busy-indicator
+                            v-if="loading"
+                            class="loading-state"
+                            active
+                            size="M"
+                            text="Berechtigungen werden geladen..."></ui5-busy-indicator>
+
+        <ui5-tabcontainer v-else>
+          <ui5-tab text="Aktive Freigaben">
+            <ActivePermissions
+                               :permissions="permissions"
+                               :permission-changed="permissionChanged"
+                               :saving="saving"
+                               @toggle="handleToggle"
+                               @save="savePermissions" />
+          </ui5-tab>
+
+          <ui5-tab text="Verlauf">
+            <ui5-table
+                       v-if="history.length"
+                       overflow-mode="Popin"
+                       accessible-name="Berechtigungsverlauf">
+              <ui5-table-header-row slot="headerRow">
+                <ui5-table-header-cell popin-text="Dateninhaber">
+                  Dateninhaber
+                </ui5-table-header-cell>
+                <ui5-table-header-cell popin-text="Produkt">
+                  Produkt
+                </ui5-table-header-cell>
+                <ui5-table-header-cell popin-text="Zweck">
+                  Zweck
+                </ui5-table-header-cell>
+                <ui5-table-header-cell popin-text="Ereignis">
+                  Ereignis
+                </ui5-table-header-cell>
+              </ui5-table-header-row>
+
+              <ui5-table-row v-for="entry in history" :key="entry.id">
+                <ui5-table-cell>{{ entry.dateninhaber }}</ui5-table-cell>
+                <ui5-table-cell>{{ entry.produkt }}</ui5-table-cell>
+                <ui5-table-cell>{{ entry.zweck }}</ui5-table-cell>
+                <ui5-table-cell>{{ entry.ereignis }}</ui5-table-cell>
+              </ui5-table-row>
+            </ui5-table>
+            <p v-else class="history-empty">Es gibt noch keine Einträge im Verlauf.</p>
+          </ui5-tab>
+        </ui5-tabcontainer>
+      </main>
+    </ui5-page>
 
     <ui5-toast
                v-if="toastMessage"
@@ -52,37 +105,5 @@ const onSubmit = async () => {
                duration="5000">
       {{ toastMessage }}
     </ui5-toast>
-
-    <!-- Formular -->
-    <!-- <section style="margin-bottom: 30px; border-top: 2px solid #eee; padding-top: 20px;">
-      <h3>Neue Berechtigung erteilen</h3>
-      <div style="display: flex; flex-direction: column; max-width: 400px; gap: 10px;">
-        <label for="dateninhaber">Dateninhaber</label>
-        <select id="dateninhaber" v-model="newPerm.dateninhaber">
-          <option>Inhouse Bank</option>
-          <option>Externe Bank</option>
-          <option>Wertpapierfirma</option>
-          <option>Versicherer</option>
-          <option>Altersversorge GmbH</option>
-        </select>
-        <label for="zweck">Zweck</label>
-        <input id="zweck" type="text" v-model="newPerm.zweck" placeholder="Zweck" />
-        <label for="produkt">Produkt</label>
-        <input id="produkt" type="text" v-model="newPerm.produkt" placeholder="Produkt" />
-        <button @click="onSubmit" style="padding: 8px; background: #007ad9; color: white; border: none;">
-          Freigabe erteilen
-        </button>
-      </div>
-    </section> -->
-
-    <!-- Historie -->
-    <!-- <section style="border-top: 2px solid #eee; padding-top: 20px;">
-      <h3>Zweijahreshistorie</h3>
-      <ul>
-        <li v-for="h in history" :key="h.id">
-          {{ h.dateninhaber }} – {{ h.produkt }} | <em>{{ h.ereignis }}</em>
-        </li>
-      </ul>
-    </section> -->
   </div>
 </template>
