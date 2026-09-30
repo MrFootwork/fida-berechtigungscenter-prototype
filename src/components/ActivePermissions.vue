@@ -43,23 +43,11 @@ const permissionGroups = computed(() => purposes.map(({ name, icon }) => ({
   permissions: props.permissions.filter(item => item.zweck === name)
 })))
 
-const openFidaDemo = () => {
-  window.location.assign(
-    'https://adesso-sap-dna-sac-sandbox.eu20.analytics.cloud.sap/sap/fpa/ui/app.html#/story2&/s2/C69009F47698490F834B9AB582E67DD5/?mode=view'
-  )
-}
-
 </script>
 
 <template>
   <section style="margin-bottom: 30px;">
     <h3>Aktive Freigaben</h3>
-
-    <ui5-button
-                accessible-role="Link"
-                @click="openFidaDemo">
-      FIDA Kunde Demo öffnen
-    </ui5-button>
 
     <div class="save-actions">
       <ui5-button

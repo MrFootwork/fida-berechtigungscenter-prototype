@@ -26,6 +26,13 @@ const {
   handleToggle,
   savePermissions
 } = usePermissions()
+
+const openFidaDemo = () => {
+  window.location.assign(
+    'https://adesso-sap-dna-sac-sandbox.eu20.analytics.cloud.sap/sap/fpa/ui/app.html#/story2&/s2/C69009F47698490F834B9AB582E67DD5/?mode=view'
+  )
+}
+
 </script>
 
 <template>
@@ -36,8 +43,17 @@ const {
 
     <ui5-page class="application-page">
       <div slot="header" class="page-heading">
-        <ui5-title level="H1">Berechtigungscenter</ui5-title>
-        <p>Verwalten Sie Ihre aktiven Datenfreigaben.</p>
+        <div class="page-heading-copy">
+          <ui5-title level="H1">Berechtigungscenter</ui5-title>
+          <p>Verwalten Sie Ihre aktiven Datenfreigaben.</p>
+        </div>
+        <div class="page-heading-action">
+          <ui5-button
+                      accessible-role="Link"
+                      @click="openFidaDemo">
+            FIDA Kunde Demo öffnen
+          </ui5-button>
+        </div>
       </div>
 
       <main class="page-content">
