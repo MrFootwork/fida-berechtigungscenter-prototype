@@ -1,17 +1,17 @@
 <script setup>
-import "@ui5/webcomponents-fiori/dist/ShellBar.js"
-import "@ui5/webcomponents-fiori/dist/Page.js"
-import "@ui5/webcomponents/dist/TabContainer.js"
-import "@ui5/webcomponents/dist/Tab.js"
-import "@ui5/webcomponents/dist/BusyIndicator.js"
-import "@ui5/webcomponents/dist/MessageStrip.js"
-import "@ui5/webcomponents/dist/Table.js"
-import "@ui5/webcomponents/dist/TableRow.js"
-import "@ui5/webcomponents/dist/TableCell.js"
-import "@ui5/webcomponents/dist/TableHeaderRow.js"
-import "@ui5/webcomponents/dist/TableHeaderCell.js"
-import "@ui5/webcomponents/dist/Title.js"
-import "@ui5/webcomponents/dist/Toast.js"
+import '@ui5/webcomponents-fiori/dist/ShellBar.js'
+import '@ui5/webcomponents-fiori/dist/Page.js'
+import '@ui5/webcomponents/dist/TabContainer.js'
+import '@ui5/webcomponents/dist/Tab.js'
+import '@ui5/webcomponents/dist/BusyIndicator.js'
+import '@ui5/webcomponents/dist/MessageStrip.js'
+import '@ui5/webcomponents/dist/Table.js'
+import '@ui5/webcomponents/dist/TableRow.js'
+import '@ui5/webcomponents/dist/TableCell.js'
+import '@ui5/webcomponents/dist/TableHeaderRow.js'
+import '@ui5/webcomponents/dist/TableHeaderCell.js'
+import '@ui5/webcomponents/dist/Title.js'
+import '@ui5/webcomponents/dist/Toast.js'
 import { usePermissions } from '@/composables/usePermissions'
 import ActivePermissions from '@/components/ActivePermissions.vue'
 
@@ -24,22 +24,22 @@ const {
   toastMessage,
   toastKey,
   handleToggle,
-  savePermissions
+  savePermissions,
 } = usePermissions()
 
 const openFidaDemo = () => {
   window.location.assign(
-    'https://adesso-sap-dna-sac-sandbox.eu20.analytics.cloud.sap/sap/fpa/ui/app.html#/story2&/s2/C69009F47698490F834B9AB582E67DD5/?mode=view'
+    'https://adesso-sap-dna-sac-sandbox.eu20.analytics.cloud.sap/sap/fpa/ui/app.html#/story2&/s2/C69009F47698490F834B9AB582E67DD5/?mode=view',
   )
 }
-
 </script>
 
 <template>
   <div class="application-layout">
     <ui5-shellbar
-                  primary-title="FIDA Berechtigungscenter"
-                  secondary-title="Berechtigungsverwaltung"></ui5-shellbar>
+      primary-title="FIDA Berechtigungscenter"
+      secondary-title="Berechtigungsverwaltung"
+    ></ui5-shellbar>
 
     <ui5-page class="application-page">
       <div slot="header" class="page-heading">
@@ -48,9 +48,7 @@ const openFidaDemo = () => {
           <p>Verwalten Sie Ihre aktiven Datenfreigaben.</p>
         </div>
         <div class="page-heading-action">
-          <ui5-button
-                      accessible-role="Link"
-                      @click="openFidaDemo">
+          <ui5-button accessible-role="Link" @click="openFidaDemo">
             FIDA Kunde Demo öffnen
           </ui5-button>
         </div>
@@ -58,47 +56,46 @@ const openFidaDemo = () => {
 
       <main class="page-content">
         <ui5-message-strip
-                           v-if="permissionChanged || saving"
-                           design="Information"
-                           hide-close-button>
+          v-if="permissionChanged || saving"
+          design="Information"
+          hide-close-button
+        >
           {{ saving ? 'Änderungen werden gespeichert...' : 'Sie haben ungespeicherte Änderungen.' }}
         </ui5-message-strip>
 
         <ui5-busy-indicator
-                            v-if="loading"
-                            class="loading-state"
-                            active
-                            size="M"
-                            text="Berechtigungen werden geladen..."></ui5-busy-indicator>
+          v-if="loading"
+          class="loading-state"
+          active
+          size="M"
+          text="Berechtigungen werden geladen..."
+        >
+        </ui5-busy-indicator>
 
         <ui5-tabcontainer v-else>
           <ui5-tab text="Aktive Freigaben">
             <ActivePermissions
-                               :permissions="permissions"
-                               :permission-changed="permissionChanged"
-                               :saving="saving"
-                               @toggle="handleToggle"
-                               @save="savePermissions" />
+              :permissions="permissions"
+              :permission-changed="permissionChanged"
+              :saving="saving"
+              @toggle="handleToggle"
+              @save="savePermissions"
+            />
           </ui5-tab>
 
           <ui5-tab text="Verlauf">
             <ui5-table
-                       v-if="history.length"
-                       overflow-mode="Popin"
-                       accessible-name="Berechtigungsverlauf">
+              v-if="history.length"
+              overflow-mode="Popin"
+              accessible-name="Berechtigungsverlauf"
+            >
               <ui5-table-header-row slot="headerRow">
                 <ui5-table-header-cell popin-text="Dateninhaber">
                   Dateninhaber
                 </ui5-table-header-cell>
-                <ui5-table-header-cell popin-text="Produkt">
-                  Produkt
-                </ui5-table-header-cell>
-                <ui5-table-header-cell popin-text="Zweck">
-                  Zweck
-                </ui5-table-header-cell>
-                <ui5-table-header-cell popin-text="Ereignis">
-                  Ereignis
-                </ui5-table-header-cell>
+                <ui5-table-header-cell popin-text="Produkt"> Produkt </ui5-table-header-cell>
+                <ui5-table-header-cell popin-text="Zweck"> Zweck </ui5-table-header-cell>
+                <ui5-table-header-cell popin-text="Ereignis"> Ereignis </ui5-table-header-cell>
               </ui5-table-header-row>
 
               <ui5-table-row v-for="entry in history" :key="entry.id">
@@ -114,11 +111,7 @@ const openFidaDemo = () => {
       </main>
     </ui5-page>
 
-    <ui5-toast
-               v-if="toastMessage"
-               :key="toastKey"
-               :open="true"
-               duration="5000">
+    <ui5-toast v-if="toastMessage" :key="toastKey" :open="true" duration="5000">
       {{ toastMessage }}
     </ui5-toast>
   </div>

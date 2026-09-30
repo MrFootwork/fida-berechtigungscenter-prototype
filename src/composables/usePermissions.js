@@ -18,17 +18,16 @@ export function usePermissions() {
 
   const loadData = async () => {
     loading.value = true
-    permissions.value = (await permissionService.getPermissions())
-      .map(permission => ({ ...permission }))
+    permissions.value = (await permissionService.getPermissions()).map((permission) => ({
+      ...permission,
+    }))
     history.value = await permissionService.getHistory()
     loading.value = false
   }
 
   const handleToggle = (updatedItem) => {
-    permissions.value = permissions.value.map(permission =>
-      permission.id === updatedItem.id
-        ? { ...permission, status: updatedItem.status }
-        : permission
+    permissions.value = permissions.value.map((permission) =>
+      permission.id === updatedItem.id ? { ...permission, status: updatedItem.status } : permission,
     )
     permissionChanged.value = true
   }
@@ -36,7 +35,7 @@ export function usePermissions() {
   const savePermissions = async () => {
     if (!permissionChanged.value || saving.value) return
 
-    const pendingPermissions = permissions.value.map(permission => ({ ...permission }))
+    const pendingPermissions = permissions.value.map((permission) => ({ ...permission }))
     permissionChanged.value = false
     saving.value = true
 
@@ -72,6 +71,6 @@ export function usePermissions() {
     showToast,
     handleToggle,
     savePermissions,
-    createPermission
+    createPermission,
   }
 }

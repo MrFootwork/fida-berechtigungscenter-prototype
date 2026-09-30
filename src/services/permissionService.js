@@ -13,7 +13,7 @@ let permissions = [
     nichtAngefordert: ['Transaktionen'],
     ergebnis: ['Konditionsvergleich'],
     gueltigBis: '2027-08-26',
-    status: false
+    status: false,
   },
   {
     id: 'PRM-Z2-B',
@@ -26,7 +26,7 @@ let permissions = [
     nichtAngefordert: ['Transaktionen'],
     ergebnis: ['Konditionsvergleich', 'Übersicht'],
     gueltigBis: '2027-08-26',
-    status: false
+    status: false,
   },
   {
     id: 'PRM-Z2-C',
@@ -39,7 +39,7 @@ let permissions = [
     nichtAngefordert: ['Eignungsdaten'],
     ergebnis: ['Übersicht'],
     gueltigBis: '2027-08-26',
-    status: false
+    status: false,
   },
   {
     id: 'PRM-Z2-D',
@@ -52,7 +52,7 @@ let permissions = [
     nichtAngefordert: ['Schadenhistorie', 'Bedarfsanalyse'],
     ergebnis: ['Übersicht', 'feste Auszahlungen'],
     gueltigBis: '2027-08-26',
-    status: false
+    status: false,
   },
   {
     id: 'PRM-Z3-E',
@@ -65,8 +65,8 @@ let permissions = [
     nichtAngefordert: [],
     ergebnis: ['Anzeige'],
     gueltigBis: '2027-08-26',
-    status: false
-  }
+    status: false,
+  },
 ]
 
 let history = [
@@ -75,11 +75,11 @@ let history = [
     dateninhaber: 'Wertpapierfirma',
     produkt: 'Depot, ETF-Sparplan',
     zweck: 'Liquiditätsoptimierung',
-    ereignis: 'Widerrufen am 15.01.2026'
-  }
+    ereignis: 'Widerrufen am 15.01.2026',
+  },
 ]
 
-const simulateApiDelay = () => new Promise(resolve => setTimeout(resolve, 500))
+const simulateApiDelay = () => new Promise((resolve) => setTimeout(resolve, 800))
 
 export const permissionService = {
   async getDataOwners() {
@@ -100,9 +100,9 @@ export const permissionService = {
   async savePermissions(updatedPermissions) {
     await simulateApiDelay()
 
-    updatedPermissions.forEach(updatedPermission => {
+    updatedPermissions.forEach((updatedPermission) => {
       const previousPermission = permissions.find(
-        permission => permission.id === updatedPermission.id
+        (permission) => permission.id === updatedPermission.id,
       )
 
       if (previousPermission?.status && !updatedPermission.status) {
@@ -111,16 +111,16 @@ export const permissionService = {
           dateninhaber: updatedPermission.dateninhaber,
           produkt: updatedPermission.produkt,
           zweck: updatedPermission.zweck,
-          ereignis: `Widerrufen am ${new Date().toLocaleDateString()}`
+          ereignis: `Widerrufen am ${new Date().toLocaleDateString()}`,
         })
       }
     })
 
-    permissions = updatedPermissions.map(permission => ({ ...permission }))
+    permissions = updatedPermissions.map((permission) => ({ ...permission }))
 
     return {
-      permissions: permissions.map(permission => ({ ...permission })),
-      history: [...history]
+      permissions: permissions.map((permission) => ({ ...permission })),
+      history: [...history],
     }
   },
 
@@ -129,8 +129,8 @@ export const permissionService = {
     permissions.push({
       id: Date.now().toString(),
       ...newPermData,
-      status: true
+      status: true,
     })
     return [...permissions]
-  }
+  },
 }
