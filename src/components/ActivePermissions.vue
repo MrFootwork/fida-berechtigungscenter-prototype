@@ -48,17 +48,19 @@ const permissionGroups = computed(() =>
 
 <template>
   <section style="margin-bottom: 30px">
-    <h3>Aktive Freigaben</h3>
+    <div class="permissions-header">
+      <h3>Aktive Freigaben</h3>
 
-    <div class="save-actions">
-      <ui5-button
-        design="Emphasized"
-        icon="save"
-        :disabled="!permissionChanged || saving"
-        @click="emit('save')"
-      >
-        Speichern
-      </ui5-button>
+      <div class="save-actions">
+        <ui5-button
+          design="Emphasized"
+          icon="save"
+          :disabled="!permissionChanged || saving"
+          @click="emit('save')"
+        >
+          Speichern
+        </ui5-button>
+      </div>
     </div>
 
     <section
@@ -114,11 +116,22 @@ const permissionGroups = computed(() =>
   padding-left: 0.25rem;
 }
 
+.permissions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.permissions-header h3 {
+  margin: 0;
+}
+
 .save-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 1rem;
-  padding-bottom: 0.5rem;
 }
 
 .permission-group + .permission-group {

@@ -6,7 +6,9 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/fida-berechtigungscenter-prototype/',
+  // base: '/fida-berechtigungscenter-prototype/',
+  // Nutzt die Variable von GitHub Actions, oder '/' für dein lokales 'npm run dev'
+  base: process.env.VITE_BASE_PATH || '/',
   plugins: [
     vue(),
     vueDevTools(),

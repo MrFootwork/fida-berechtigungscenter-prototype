@@ -1,0 +1,33 @@
+name: Deploy Multiple Branches to GH Pages
+
+on:
+  push:
+    branches:
+      - main
+      - v1
+      - v2
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Install and Build 🔧
+        run: |
+          npm install
+          # Wir übergeben den Branch-Namen dynamisch als Base-Pfad für Vite!
+          # z.B. /repo-name/main/ oder /repo-name/feature-neu/
+          export VITE_BASE_PATH="/${{ github.event.repository.name }}/${{ github.ref_name }}/"
+          npm run build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
+          target-folder: ${{ github.ref_name }} # Schiebt es in den Ordner /main oder /feature-neu
+          branch: gh-pages
