@@ -26,8 +26,8 @@ const props = defineProps({
 })
 
 const form = reactive({
-  dateninhaber: props.dataOwners[0] ?? '',
-  zweck: props.purposes[0]?.zweck ?? '',
+  dateninhaber: '',
+  zweck: '',
 })
 
 const permissionOptions = props.permissions.map((permission) => ({
@@ -48,6 +48,7 @@ const matchingPermissions = computed(() =>
 const selectedPermission = computed(() =>
   matchingPermissions.value.find((permission) => permission.id === selectedPermissionId.value),
 )
+const selectionIncomplete = computed(() => !form.dateninhaber || !form.zweck)
 
 const updateSelection = (field, value) => {
   form[field] = value
@@ -99,8 +100,11 @@ const createGrant = () => {
 
       <section class="permission-options" aria-label="Mögliche Berechtigungsobjekte">
         <h4>Mögliche Berechtigungen</h4>
+        <p v-if="selectionIncomplete" class="empty-options">
+          Bitte wählen Sie einen Dateninhaber und einen Zweck aus.
+        </p>
         <ui5-table
-          v-if="matchingPermissions.length"
+          v-else-if="matchingPermissions.length"
           overflow-mode="Popin"
           accessible-name="Berechtigungsobjekte für die ausgewählte Kombination"
         >
