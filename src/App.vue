@@ -33,7 +33,7 @@ const openFidaDemo = () => {
 <template>
   <div class="application-layout">
     <ui5-shellbar
-      primary-title="FIDA Berechtigungscenter"
+      primary-title="FIDA Berechtigungscenter v1"
       secondary-title="Berechtigungsverwaltung"
     ></ui5-shellbar>
 
