@@ -5,15 +5,11 @@ import '@ui5/webcomponents/dist/TabContainer.js'
 import '@ui5/webcomponents/dist/Tab.js'
 import '@ui5/webcomponents/dist/BusyIndicator.js'
 import '@ui5/webcomponents/dist/MessageStrip.js'
-import '@ui5/webcomponents/dist/Table.js'
-import '@ui5/webcomponents/dist/TableRow.js'
-import '@ui5/webcomponents/dist/TableCell.js'
-import '@ui5/webcomponents/dist/TableHeaderRow.js'
-import '@ui5/webcomponents/dist/TableHeaderCell.js'
 import '@ui5/webcomponents/dist/Title.js'
 import '@ui5/webcomponents/dist/Toast.js'
 import { usePermissions } from '@/composables/usePermissions'
 import ActivePermissions from '@/components/ActivePermissions.vue'
+import PermissionHistory from '@/components/PermissionHistory.vue'
 
 const {
   permissions,
@@ -84,28 +80,7 @@ const openFidaDemo = () => {
           </ui5-tab>
 
           <ui5-tab text="Verlauf">
-            <ui5-table
-              v-if="history.length"
-              overflow-mode="Popin"
-              accessible-name="Berechtigungsverlauf"
-            >
-              <ui5-table-header-row slot="headerRow">
-                <ui5-table-header-cell popin-text="Dateninhaber">
-                  Dateninhaber
-                </ui5-table-header-cell>
-                <ui5-table-header-cell popin-text="Produkt"> Produkt </ui5-table-header-cell>
-                <ui5-table-header-cell popin-text="Zweck"> Zweck </ui5-table-header-cell>
-                <ui5-table-header-cell popin-text="Ereignis"> Ereignis </ui5-table-header-cell>
-              </ui5-table-header-row>
-
-              <ui5-table-row v-for="entry in history" :key="entry.id">
-                <ui5-table-cell>{{ entry.dateninhaber }}</ui5-table-cell>
-                <ui5-table-cell>{{ entry.produkt }}</ui5-table-cell>
-                <ui5-table-cell>{{ entry.zweck }}</ui5-table-cell>
-                <ui5-table-cell>{{ entry.ereignis }}</ui5-table-cell>
-              </ui5-table-row>
-            </ui5-table>
-            <p v-else class="history-empty">Es gibt noch keine Einträge im Verlauf.</p>
+            <PermissionHistory :history="history" />
           </ui5-tab>
         </ui5-tabcontainer>
       </main>

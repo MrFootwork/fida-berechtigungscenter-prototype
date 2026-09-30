@@ -81,11 +81,6 @@
   padding: 4rem 1rem;
 }
 
-.history-empty {
-  padding: 1rem 0;
-  color: var(--sapContent_LabelColor, #5b738b);
-}
-
 @media (max-width: 640px) {
   .page-heading {
     align-items: flex-start;
