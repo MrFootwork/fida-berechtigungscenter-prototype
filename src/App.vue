@@ -7,6 +7,7 @@ import '@ui5/webcomponents/dist/BusyIndicator.js'
 import '@ui5/webcomponents/dist/MessageStrip.js'
 import '@ui5/webcomponents/dist/Title.js'
 import '@ui5/webcomponents/dist/Toast.js'
+import '@ui5/webcomponents/dist/Button.js'
 import { usePermissions } from '@/composables/usePermissions'
 import ActivePermissions from '@/components/ActivePermissions.vue'
 import PermissionHistory from '@/components/PermissionHistory.vue'
@@ -22,15 +23,19 @@ const {
   saving,
   toastMessage,
   toastKey,
-  handleToggle,
+  updatePermission,
   savePermissions,
-  createPermission,
 } = usePermissions()
 
 const openFidaDemo = () => {
   window.location.assign(
     'https://adesso-sap-dna-sac-sandbox.eu20.analytics.cloud.sap/sap/fpa/ui/app.html#/story2&/s2/C69009F47698490F834B9AB582E67DD5/?mode=view',
   )
+}
+
+const handleGrantPermission = async (permission) => {
+  updatePermission(permission)
+  await savePermissions()
 }
 </script>
 
@@ -78,7 +83,8 @@ const openFidaDemo = () => {
               :data-owners="dataOwners"
               :purposes="purposes"
               :permissions="permissions"
-              @create="createPermission"
+              :saving="saving"
+              @change="handleGrantPermission"
             />
           </ui5-tab>
 
@@ -87,7 +93,7 @@ const openFidaDemo = () => {
               :permissions="permissions"
               :permission-changed="permissionChanged"
               :saving="saving"
-              @toggle="handleToggle"
+              @change="updatePermission"
               @save="savePermissions"
             />
           </ui5-tab>

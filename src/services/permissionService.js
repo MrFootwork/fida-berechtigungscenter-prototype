@@ -114,13 +114,13 @@ export const permissionService = {
         (permission) => permission.id === updatedPermission.id,
       )
 
-      if (previousPermission?.status && !updatedPermission.status) {
+      if (previousPermission && previousPermission.status !== updatedPermission.status) {
         history.unshift({
-          id: Date.now().toString(),
+          id: `${Date.now()}-${updatedPermission.id}`,
           dateninhaber: updatedPermission.dateninhaber,
           produkt: updatedPermission.produkt,
           zweck: updatedPermission.zweck,
-          ereignis: `Widerrufen am ${new Date().toLocaleDateString()}`,
+          ereignis: `${updatedPermission.status ? 'Erteilt' : 'Widerrufen'} am ${new Date().toLocaleDateString()}`,
         })
       }
     })
@@ -131,30 +131,5 @@ export const permissionService = {
       permissions: permissions.map((permission) => ({ ...permission })),
       history: [...history],
     }
-  },
-
-  async activatePermission(permissionId) {
-    await simulateApiDelay()
-    const permission = permissions.find((item) => item.id === permissionId)
-
-    if (!permission) return null
-
-    const alreadyActive = permission.status
-    permission.status = true
-
-    return {
-      alreadyActive,
-      permissions: permissions.map((item) => ({ ...item })),
-    }
-  },
-
-  async addPermission(newPermData) {
-    await simulateApiDelay()
-    permissions.push({
-      ...newPermData,
-      id: newPermData.id ?? Date.now().toString(),
-      status: true,
-    })
-    return [...permissions]
   },
 }

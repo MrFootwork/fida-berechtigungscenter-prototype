@@ -29,7 +29,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['toggle', 'save'])
+const emit = defineEmits(['change', 'save'])
 
 const purposes = [
   { name: 'Kreditoptimierung', icon: 'loan' },
@@ -49,18 +49,15 @@ const permissionGroups = computed(() =>
 <template>
   <section style="margin-bottom: 30px">
     <div class="permissions-header">
-      <h3>Aktive Freigaben</h3>
-
-      <div class="save-actions">
-        <ui5-button
-          design="Emphasized"
-          icon="save"
-          :disabled="!permissionChanged || saving"
-          @click="emit('save')"
-        >
-          Speichern
-        </ui5-button>
-      </div>
+      <h3 class="permissions-title">Aktive Freigaben</h3>
+      <ui5-button
+        design="Emphasized"
+        icon="save"
+        :disabled="!permissionChanged || saving"
+        @click="emit('save')"
+      >
+        Speichern
+      </ui5-button>
     </div>
 
     <section
@@ -97,7 +94,7 @@ const permissionGroups = computed(() =>
               :disabled="saving"
               :accessible-name="`Status für ${item.dateninhaber}`"
               @change="
-                emit('toggle', {
+                emit('change', {
                   ...item,
                   status: $event.currentTarget.checked,
                 })
@@ -125,13 +122,8 @@ const permissionGroups = computed(() =>
   margin-bottom: 1rem;
 }
 
-.permissions-header h3 {
+.permissions-title {
   margin: 0;
-}
-
-.save-actions {
-  display: flex;
-  justify-content: flex-end;
 }
 
 .permission-group + .permission-group {

@@ -8,7 +8,7 @@ import '@ui5/webcomponents/dist/TableHeaderRow.js'
 import '@ui5/webcomponents/dist/TableHeaderCell.js'
 import { computed, reactive, ref } from 'vue'
 
-const emit = defineEmits(['create'])
+const emit = defineEmits(['change'])
 
 const props = defineProps({
   dataOwners: {
@@ -22,6 +22,10 @@ const props = defineProps({
   permissions: {
     type: Array,
     required: true,
+  },
+  saving: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -58,7 +62,7 @@ const updateSelection = (field, value) => {
 const createGrant = () => {
   if (!selectedPermission.value) return
 
-  emit('create', {
+  emit('change', {
     ...selectedPermission.value,
     status: true,
   })
@@ -139,7 +143,7 @@ const createGrant = () => {
       </section>
 
       <div class="form-actions">
-        <ui5-button design="Emphasized" type="Submit" :disabled="!selectedPermission">
+        <ui5-button design="Emphasized" type="Submit" :disabled="!selectedPermission || saving">
           Freigabe erteilen
         </ui5-button>
       </div>

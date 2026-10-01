@@ -33,7 +33,18 @@ export function usePermissions() {
     loading.value = false
   }
 
-  const handleToggle = (updatedItem) => {
+  const updatePermission = (updatedItem) => {
+    const currentPermission = permissions.value.find(
+      (permission) => permission.id === updatedItem.id,
+    )
+
+    if (!currentPermission) return
+
+    if (currentPermission.status === updatedItem.status) {
+      if (updatedItem.status) showToast('Diese Berechtigung ist bereits aktiv.')
+      return
+    }
+
     permissions.value = permissions.value.map((permission) =>
       permission.id === updatedItem.id ? { ...permission, status: updatedItem.status } : permission,
     )
@@ -60,25 +71,6 @@ export function usePermissions() {
     }
   }
 
-  const createPermission = async (formData) => {
-    const activation = await permissionService.activatePermission(formData.id)
-
-    if (activation) {
-      permissions.value = activation.permissions
-
-      if (activation.alreadyActive) {
-        showToast('Diese Berechtigung ist bereits aktiv. Es wurden keine Daten geändert.')
-        return
-      }
-
-      showToast('Freigabe erfolgreich erteilt.')
-      return
-    }
-
-    permissions.value = await permissionService.addPermission(formData)
-    showToast('Freigabe erfolgreich erteilt.')
-  }
-
   onMounted(() => {
     loadData()
   })
@@ -93,9 +85,7 @@ export function usePermissions() {
     saving,
     toastMessage,
     toastKey,
-    showToast,
-    handleToggle,
+    updatePermission,
     savePermissions,
-    createPermission,
   }
 }
