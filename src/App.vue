@@ -13,6 +13,7 @@ import ActivePermissions from '@/components/ActivePermissions.vue'
 import PermissionHistory from '@/components/PermissionHistory.vue'
 import GrantPermission from '@/components/GrantPermission.vue'
 
+// test
 const {
   permissions,
   dataOwners,
