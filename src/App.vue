@@ -42,7 +42,7 @@ const handleGrantPermission = async (permission) => {
 <template>
   <div class="application-layout">
     <ui5-shellbar
-      primary-title="FIDA Berechtigungscenter v1"
+      primary-title="FIDA Berechtigungscenter"
       secondary-title="Berechtigungsverwaltung"
     ></ui5-shellbar>
 
@@ -79,7 +79,7 @@ const handleGrantPermission = async (permission) => {
         </ui5-busy-indicator>
 
         <ui5-tabcontainer v-else>
-          <ui5-tab text="Freigabe erteilen">
+          <!-- <ui5-tab text="Freigabe erteilen">
             <GrantPermission
               :data-owners="dataOwners"
               :purposes="purposes"
@@ -87,7 +87,7 @@ const handleGrantPermission = async (permission) => {
               :saving="saving"
               @change="handleGrantPermission"
             />
-          </ui5-tab>
+          </ui5-tab> -->
 
           <ui5-tab text="Aktive Freigaben">
             <ActivePermissions
