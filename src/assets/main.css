@@ -62,10 +62,15 @@
   overflow: hidden;
 }
 
-.page-content > ui5-message-strip {
+.page-content > .save-status {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 3rem);
+  left: 50%;
+  z-index: 1000;
   display: block;
-  flex: 0 0 auto;
-  margin-bottom: 1rem;
+  width: min(48rem, calc(100vw - 2rem));
+  margin: 0;
+  transform: translateX(-50%);
 }
 
 .page-content > ui5-tabcontainer {

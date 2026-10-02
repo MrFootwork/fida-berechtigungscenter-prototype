@@ -18,14 +18,18 @@ defineProps({
     <ui5-table-header-row slot="headerRow">
       <ui5-table-header-cell popin-text="Dateninhaber"> Dateninhaber </ui5-table-header-cell>
       <ui5-table-header-cell popin-text="Produkt"> Produkt </ui5-table-header-cell>
+      <ui5-table-header-cell popin-text="Angeforderte Daten">
+        Angeforderte Daten
+      </ui5-table-header-cell>
       <ui5-table-header-cell popin-text="Zweck"> Zweck </ui5-table-header-cell>
       <ui5-table-header-cell popin-text="Ereignis"> Ereignis </ui5-table-header-cell>
     </ui5-table-header-row>
 
     <ui5-table-row v-for="entry in history" :key="entry.id">
       <ui5-table-cell>{{ entry.dateninhaber }}</ui5-table-cell>
-      <ui5-table-cell>{{ entry.produkt }}</ui5-table-cell>
       <ui5-table-cell>{{ entry.zweck }}</ui5-table-cell>
+      <ui5-table-cell>{{ entry.produkt }}</ui5-table-cell>
+      <ui5-table-cell>{{ entry.angeforderteFelder.join(', ') }}</ui5-table-cell>
       <ui5-table-cell>{{ entry.ereignis }}</ui5-table-cell>
     </ui5-table-row>
   </ui5-table>

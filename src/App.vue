@@ -61,6 +61,7 @@ const handleGrantPermission = async (permission) => {
 
       <main class="page-content">
         <ui5-message-strip
+          class="save-status"
           v-if="permissionChanged || saving"
           design="Information"
           hide-close-button

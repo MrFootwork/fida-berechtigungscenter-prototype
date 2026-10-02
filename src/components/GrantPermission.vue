@@ -114,6 +114,7 @@ const createGrant = () => {
         >
           <ui5-table-header-row slot="headerRow">
             <ui5-table-header-cell popin-text="Auswahl">Auswahl</ui5-table-header-cell>
+            <ui5-table-header-cell popin-text="Dateninhaber">Dateninhaber</ui5-table-header-cell>
             <ui5-table-header-cell popin-text="Produkt">Produkt</ui5-table-header-cell>
             <ui5-table-header-cell popin-text="Kategorie">Kategorie</ui5-table-header-cell>
             <ui5-table-header-cell popin-text="Angeforderte Daten">
@@ -132,6 +133,7 @@ const createGrant = () => {
                 @change="selectedPermissionId = $event.currentTarget.value"
               ></ui5-radio-button>
             </ui5-table-cell>
+            <ui5-table-cell>{{ permission.dateninhaber }}</ui5-table-cell>
             <ui5-table-cell>{{ permission.produkt }}</ui5-table-cell>
             <ui5-table-cell>{{ permission.kategorie }}</ui5-table-cell>
             <ui5-table-cell>{{ permission.angeforderteFelder.join(', ') }}</ui5-table-cell>

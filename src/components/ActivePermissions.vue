@@ -80,13 +80,19 @@ const permissionGroups = computed(() =>
       >
         <ui5-table-header-row slot="headerRow">
           <ui5-table-header-cell popin-text="Dateninhaber"> Dateninhaber </ui5-table-header-cell>
+          <ui5-table-header-cell popin-text="Produkt"> Produkt </ui5-table-header-cell>
           <ui5-table-header-cell popin-text="Kategorie"> Kategorie </ui5-table-header-cell>
+          <ui5-table-header-cell popin-text="Angeforderte Daten">
+            Angeforderte Daten
+          </ui5-table-header-cell>
           <ui5-table-header-cell popin-text="Status" importance="3"> Status </ui5-table-header-cell>
         </ui5-table-header-row>
 
         <ui5-table-row v-for="item in group.permissions" :key="item.id">
           <ui5-table-cell>{{ item.dateninhaber }}</ui5-table-cell>
+          <ui5-table-cell>{{ item.produkt }}</ui5-table-cell>
           <ui5-table-cell>{{ item.kategorie }}</ui5-table-cell>
+          <ui5-table-cell>{{ item.angeforderteFelder.join(', ') }}</ui5-table-cell>
           <ui5-table-cell>
             <ui5-switch
               class="permission-switch"

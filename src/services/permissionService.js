@@ -76,6 +76,7 @@ let history = [
     id: 'h-1',
     dateninhaber: 'Wertpapierfirma',
     produkt: 'Depot, ETF-Sparplan',
+    angeforderteFelder: ['Bestandswert', 'Sparrate'],
     zweck: 'Liquiditätsoptimierung',
     ereignis: 'Widerrufen am 15.01.2026',
   },
@@ -119,6 +120,7 @@ export const permissionService = {
           id: `${Date.now()}-${updatedPermission.id}`,
           dateninhaber: updatedPermission.dateninhaber,
           produkt: updatedPermission.produkt,
+          angeforderteFelder: [...updatedPermission.angeforderteFelder],
           zweck: updatedPermission.zweck,
           ereignis: `${updatedPermission.status ? 'Erteilt' : 'Widerrufen'} am ${new Date().toLocaleDateString()}`,
         })
