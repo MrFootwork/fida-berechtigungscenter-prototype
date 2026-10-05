@@ -47,7 +47,7 @@ const permissionGroups = computed(() =>
 </script>
 
 <template>
-  <section style="margin-bottom: 30px">
+  <section style="margin-bottom: 30px; padding-bottom: 3rem">
     <div class="permissions-header">
       <h3 class="permissions-title">Aktive Freigaben</h3>
       <ui5-button
