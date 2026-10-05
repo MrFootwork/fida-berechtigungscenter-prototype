@@ -120,12 +120,16 @@ const permissionGroups = computed(() =>
 }
 
 .permissions-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-bottom: 1rem;
+  background: var(--sapBackgroundColor, #f5f6f7);
 }
 
 .permissions-title {
