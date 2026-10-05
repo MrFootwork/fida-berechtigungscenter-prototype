@@ -130,6 +130,7 @@ const permissionGroups = computed(() =>
   gap: 0.75rem;
   margin-bottom: 1rem;
   background: var(--sapBackgroundColor, #f5f6f7);
+  padding-bottom: 0.5rem;
 }
 
 .permissions-title {
