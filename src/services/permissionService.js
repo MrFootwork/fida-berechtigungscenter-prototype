@@ -72,14 +72,14 @@ let permissions = [
 const dataOwners = [...new Set(permissions.map(({ dateninhaber }) => dateninhaber))]
 
 let history = [
-  {
-    id: 'h-1',
-    dateninhaber: 'Wertpapierfirma',
-    produkt: 'Depot, ETF-Sparplan',
-    angeforderteFelder: ['Bestandswert', 'Sparrate'],
-    zweck: 'Liquiditätsoptimierung',
-    ereignis: 'Widerrufen am 15.01.2026',
-  },
+  // {
+  //   id: 'h-1',
+  //   dateninhaber: 'Wertpapierfirma',
+  //   produkt: 'Depot, ETF-Sparplan',
+  //   angeforderteFelder: ['Bestandswert', 'Sparrate'],
+  //   zweck: 'Liquiditätsoptimierung',
+  //   ereignis: 'Widerrufen am 15.01.2026',
+  // },
 ]
 
 const simulateApiDelay = () => new Promise((resolve) => setTimeout(resolve, 800))
